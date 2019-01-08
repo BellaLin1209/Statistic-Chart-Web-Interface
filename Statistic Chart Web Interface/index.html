@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- 
+Date: 2018/12/21 
+Creator:Bella Lin 
+Project:Statistic Chart Web Interface using Json file
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+ 	<title>Test Manager Web Interface</title>
+    <link href="CSS/bootstrap.min.css" rel="stylesheet">
+    <link href="CSS/style.css" rel="stylesheet">
+  </head>
+  <body>
+  	<!-- 標題 -->
+  	<h1 align="center" style="margin-top: 50px" >Statistic Chart Web Interface</h1>
+    
+	<!-- 網頁內容 -->
+    <div class="container-fluid" >
+
+    	
+		<!-- 分隔線 -->
+		<div class="Line-bottom-solid"></div>
+		<div >
+			<!-- 選取檔案按鈕 -->
+			<input type="file" id="files" name="files"  style="border-radius: 12px; color: black; padding: 10px; background: #ffffff"  />
+			<!-- 按鈕 -->
+			<button  type="button" class="btn btn-success" style="margin: 10px; align-self: right"  onclick="getJson()">取得Json結果報告</button>
+		</div>
+		<!-- 結果圖表 -->
+		<div id="ChartArea" class ="col-md-12" >
+			
+			<!--表1+表2-->
+			<div class="row">
+				<div  class="col-md-12"  style="padding: 10px;">
+					<div class="help-tip">
+	    				<p>名稱_連線數(發送數)</p>
+					</div>
+					<h5 id="TestTitle" style="font-weight:bold;">測試</h5>
+				</div>
+				<!--ErrorCode_Summary-->
+				<div id="ErrorCode_Summary" class="col-md-6">
+				<h7 style="font-weight:bold;margin: 10px">表1: 測試基本資訊表</h7>
+						<table class="table table-bordered " style="font-size:12px black;">
+								<tbody>
+									<tr>
+										<th>開始時間</th>
+										<td id="START_TIMESTAMP"></td>
+									</tr>
+									<tr>
+										<th>結束時間</th>
+										<td id="FINISH_TIMESTAMP"></td>
+									</tr>
+									<tr>
+										<th>Connection</th>
+										<td id="CONNECTION"></td>
+									</tr>
+							
+									<tr>
+										<th>Duration</th>
+										<td id="DURATION"></td>
+									</tr>
+									<tr>
+										<th>Component1 發送Request數目</th>
+										<td id="TM_SEND_REQUEST"></td>
+									</tr>
+									<tr>
+										<th>Component2 收到Request數目</th>
+										<td id="CC_GET_REQUEST"></td>
+									</tr>
+									<tr>
+										<th>Component3 收到Request數目</th>
+										<td id="SM_GET_REQUEST"></td>
+									</tr>
+									<tr>
+										<th>Component4 收到Request數目</th>
+										<td id="SKILL_GET_REQUEST"></td>
+									</tr>
+									<tr>
+										<th>Component4 AVG Process Time</th>
+										<td id="AVERAGE_PROCESS_TIME"></td>
+									</tr>
+									<tr>
+										<th>錯誤率</th>
+										<td id="ERROR_RATE"></td>
+									</tr>
+								</tbody>
+							</table>
+				</div>
+				<!--ErrorCode_List-->
+				<div id="ErrorCode_List" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px">表2: Error 錯誤統計</h7>
+	 						<table class="table table-bordered" style="font-size:14px">
+								<tbody>
+									
+									<tr>
+										<th>200</th>
+										<td id="200code"></td>
+									</tr>
+									<tr>
+										<th>總錯誤數量</th>
+										<td id="ERROR_TOTAL"></td>
+									</tr>
+									<tr>
+										<th>-1(SM)</th>
+										<td id="-1(SM)"></td>
+									</tr>
+									<tr>
+										<th>-3(SM)</th>
+										<td id="-3(SM)"></td>
+									</tr>
+							
+									<tr>
+										<th>50(SM)</th>
+										<td id="500(SM)"></td>
+									</tr>
+									<tr>
+										<th>500(CC)</th>
+										<td id="500(CC)"></td>
+									</tr>
+									<tr>
+										<th>502(CC)</th>
+										<td id="502(CC)"></td>
+									</tr>
+									<tr>
+										<th>空值</th>
+										<td id="NULL"></td>
+									</tr>
+									<tr>
+										<th>其他</th>
+										<td id="OTHER"></td>
+									</tr>
+									<tr>
+										<th>504(CC)TIMEOUT</th>
+										<td id="504(CC)_TOTAL"></td>
+									</tr>
+                                    <!--詳細的CC TIMEOUT-->
+                                    <tbody id = "504(CC)_Details" ></tbody>
+                                 
+								</tbody>
+							</table>
+				</div>
+				
+
+			</div>
+
+			<div class="row">
+
+			<!-- 圖1 -->
+			<!--ProcessTime_PT_AVG-->
+			<div id="ProcessTime_PT_AVG" class="col-md-4">
+					<h7 style="font-weight:bold;margin: 10px">圖1: 平均處理時間(Component)</h7>
+					<div id="chart_ProcessTime_PT_AVG" style="height: 300px; width: 100%;"></div>
+			</div>
+			<!-- 圖2 -->
+				<!--ProcessTime_S2E_AVG-->
+				<div id="ProcessTime_S2E_AVG" class="col-md-4">
+						<h7 style="font-weight:bold;margin: 10px">圖2: SM.CC.TM 總平均處理時間(開始~結束)</h7>
+						<div id="chart_ProcessTime_S2E_AVG" style="height: 300px; width: 100%;"></div>
+				</div>
+			<!-- 圖3 -->
+				<!-- ProcessTime_RES_AVG -->
+				<div id="ProcessTime_RES_AVG" class="col-md-4">
+						<h7 style="font-weight:bold;margin: 10px">圖3: Response 平均處理時間(傳輸)</h7>
+						<div id="chart_ProcessTime_RES_AVG" style="height: 300px; width: 100%;"></div>
+				</div>
+		
+			</div>
+
+			
+			<div class="row">
+				
+			<!-- 圖4 -->
+	
+				<!-- RequestCount_PERFORMANCE -->
+				<div id="RequestCount_PERFORMANCE" class="col-md-12">
+						<h7 style="font-weight:bold;margin: 10px">圖4: 處理效能Performance(Requests/Sec)</h7>
+						<div id="chart_RequestCount_PERFORMANCE" style="height: 300px; width: 100%;"></div>
+				</div>
+			</div>
+
+			
+			<div class="row">
+			<!-- 圖5 -->
+				<!-- RequestCount_AMOUNT -->
+				<div id="RequestCount_AMOUNT" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px">圖5: 接收與發送數量Amount</h7>
+						<div id="chart_RequestCount_AMOUNT" style="height: 300px; width: 100%;"></div>
+				</div>
+				
+	
+			<!-- 圖6 -->
+
+				<!-- RequestCount_DURATION -->
+				<div id="RequestCount_DURATION" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px">圖6: 處理時間Duration</h7>
+						<div id="chart_RequestCount_DURATION" style="height: 300px; width: 100%;"></div>
+				</div>
+			</div>
+
+			<!-- 圖7 -->
+			<div class="row">
+				<!-- Error_PieChart1-1 -->
+				<div id="Error_PieChart1-1" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px">圖7: Error Code錯誤統計</h7>
+						<div id="chart_Error_PieChart1_1" style="height: 300px; width: 100%;"></div>
+				</div>
+				<!-- Error_PieChart1-2 -->
+				<div id="Error_PieChart1-2" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px"></h7>
+						<div id="chart_Error_PieChart1_2" style="height: 300px; width: 100%;"></div>
+				</div>
+			</div>
+
+			<!-- 圖8 -->
+			<div class="row">
+				<!-- Error_PieChart2-1 -->
+				<div id="Error_PieChart2-1" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px">圖8: 詳細 504 Timeout 錯誤分類統計</h7>
+						<div id="chart_Error_PieChart2_1" style="height: 300px; width: 100%;"></div>
+				</div>
+				<!-- Error_PieChart2-2 -->
+				<div id="Error_PieChart2-2" class="col-md-6">
+						<h7 style="font-weight:bold;margin: 10px"></h7>
+						<div id="chart_Error_PieChart2_2" style="height: 300px; width: 100%;"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- 頁底 -->
+	<div class="footer">
+	  <p>Monitoring and Testing System</p>
+	   <p>© Copyright Testing Manager ,2018.</p>
+	</div>
+
+	<!-- JS AREA -->
+	<script src="js/jquery.min.js"></script>
+<!-- 	<script src="js/bootstrap.min.js"></script> -->
+	<script src="js/scripts.js"></script>
+	<script src="js/ShowResult.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+<!--回上層-->
+<a style="display:scroll;position:fixed;bottom:50px;right:20px;" href="#" title="" onFocus="if(this.blur)this.blur()">
+<img width='50px';height='50px' alt='' border='0' onmouseover="this.src='img/top_onSelect.png'" src="img/top_orig.png" onmouseout="this.src='img/top_orig.png'" /></a>
+
+	
+</body>
+</html>

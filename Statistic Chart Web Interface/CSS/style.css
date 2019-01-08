@@ -1,0 +1,126 @@
+body {
+  background-color: #e0ebeb;
+}
+
+div.row {
+ background-color: white;
+ padding: 10px;
+}
+
+/* footer */
+.footer {
+  background-color: #f1f1f1;
+  padding: 10px;
+  text-align: center;
+
+}
+
+/* 分隔線 */
+div.Line-bottom-solid {
+		border-bottom: solid gray;
+		border-width: 1px;
+		margin: 10px 10px 30px 10px; /*top right bottom left*/
+}
+
+/* 內容列行 */
+div.row {margin: 50px 10px 10px; /*top right left*/}
+
+/* 表格 */
+#ErrorCode_Summary,#ErrorCode_List {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#ErrorCode_Summary td, #ErrorCode_Summary th,#ErrorCode_List td, #ErrorCode_List th  {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#ErrorCode_Summary tr:nth-child(even),#ErrorCode_List tr:nth-child(even){background-color: #f2f2f2;}
+
+#ErrorCode_Summary tr:hover ,#ErrorCode_List tr:hover{background-color: #ddd;}
+
+#ErrorCode_Summary th ,#ErrorCode_List th{
+  width: 30%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+#ErrorCode_List tr th.ErrorCode_List_th2{
+  width: 30%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: right;
+  background-color: #00cc99;
+  color: white;
+}
+
+
+/** 提示 **/
+.help-tip{
+        position: relative;
+        text-align: center;
+        background-color: #BCDBEA;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        font-size: 14px;
+        line-height: 26px;
+        cursor: default;
+    }
+
+    .help-tip:before{
+        content:'?';
+        font-weight: bold;
+        color:#fff;
+    }
+
+    .help-tip:hover p{
+        display:block;
+        transform-origin: 100% 0%;
+        -webkit-animation: fadeIn 0.3s ease-in-out;
+        animation: fadeIn 0.3s ease-in-out;
+
+    }
+
+    .help-tip p{
+        display: none;
+        position: absolute; 
+        left: -4px;
+        top: -40pX;
+        /*在元素的左边还是右边*/
+        /*left:-4px;*/
+        
+        padding: 10px;
+        width: 200px;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        background-color: #1E2021;
+        text-align: left;
+        color: #FFF;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+
+    @-webkit-keyframes fadeIn {
+        0% { 
+            opacity:0; 
+            transform: scale(0.6);
+        }
+
+        100% {
+            opacity:100%;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeIn {
+        0% { opacity:0; }
+        100% { opacity:100%; }
+    }
